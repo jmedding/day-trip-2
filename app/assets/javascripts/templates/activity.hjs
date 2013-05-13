@@ -1,0 +1,9 @@
+<div {{ bindAttr id="elementId"}}>
+  {{name}}
+
+  {{#if distance}}
+    ({{distance}} km)
+  {{/if}}
+
+
+</div>

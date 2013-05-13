@@ -1,0 +1,15 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> Activities </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each controller}}
+    <tr>
+      {{view App.ActivityView contentBinding="this" }}
+    </tr>  
+    {{/each}}
+  <tbody>
+
+</table>
