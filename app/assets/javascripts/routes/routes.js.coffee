@@ -1,25 +1,32 @@
 App.IndexRoute = Ember.Route.extend(
   redirect : -> @transitionTo 'activities'
 )
-
 App.ActivitiesRoute = Ember.Route.extend(
   model : ->
     App.Activity.find()
+    
+)
 
-  setupController : (controller, model) ->
-    controller.set('content', model)
-    return null
+App.ActivitiesIndexRoute = Ember.Route.extend(
+  model : ->
+    this.modelFor 'activities'
+
+  # setupController : (controller, model) ->
+  #   controller.set('content', model)
+  #   return null
 
   renderTemplate: ->
-    @render(  'activities', 
-      into:   'application'
+    @render(  'activities_table', 
+      into:   'activities'
       outlet: 'main'
-      controller: 'activities'
+      controller: 'activities_index'
     )
-    @render(  'navbar', 
-      into:   'application'
-      outlet: 'navbar'
+    @render( 'query',
+      into: 'activities'
+      outlet: 'query'
+      controller: 'query'
     )
+
 
 )
 
@@ -28,10 +35,10 @@ App.ActivityDetailRoute = Ember.Route.extend(
     # this function will only be called if 
     # we enter app directly at the activity_detial route
     # it is not called when using the #linkTo helper
-
     m = App.Activity.find(params.activity_id)
-    App.navbarController.activity_clicked(m)
-    console.log "Model", m
+    console.log m
+    @controllerFor('activities').add_to_selected(m)
+    # @controllerFor('activity').activity_clicked(m)
     return m
 
   setupController : (controller, model) ->
@@ -41,7 +48,7 @@ App.ActivityDetailRoute = Ember.Route.extend(
   renderTemplate: ->
 
     @render(  'activity_detail', 
-      into:   'application'
+      into:   'activities'
       outlet: 'main'
       controller: 'activity_detail'
     )

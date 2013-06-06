@@ -33,29 +33,20 @@
     <!-- For all other devices -->
     <!-- Size should be 32 x 32 pixels -->
     <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
+
+    <script type="text/javascript" src="http://www.geoplugin.net/javascript.gp" ></script>
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB85CMctwd2XSVRPBG-IBZEFLSaaMTMmq4&sensor=false">
+         src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB85CMctwd2XSVRPBG-IBZEFLSaaMTMmq4&sensor=false">
     </script>
+
   </head>
   <body>
     <script type="text/x-handlebars" data-template-name="application">
-      {{view App.NavbarView class="navbar.navbar-fixed-top"}} 
-
       <div class="container">
-          <div class="row">
-            <div class="span7">
-              <%= bootstrap_flash %>
-              <div class="well">
-                {{ outlet main }}
-              </div>
-            </div>
-            <div class="span5">
-              <div class="well sidebar-nav">
-                <h3>Sidebar</h3>
-                
-              </div><!--/.well -->
-            </div><!--/span-->
-          </div><!--/row-->
+
+        <%= bootstrap_flash %>
+
+        {{outlet}}
 
         <footer>
           <p>&copy; Company 2013</p>

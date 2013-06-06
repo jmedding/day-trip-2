@@ -1,11 +1,11 @@
 App.User = Em.Object.extend(
     home : null
     marker : null
-    set_home: (homeLocation, map) ->
-      @set('home', homeLocation)
+    set_home: (map) ->
+      console.log "set_home, map: ", map
       if @marker is null
         marker = new google.maps.Marker(
-            position: homeLocation
+            position: @home
             title: "My Location (click and drag to move)"
             map : map
             draggable: true
@@ -48,6 +48,8 @@ App.User = Em.Object.extend(
  
 App.Activity = DS.Model.extend(
     name : DS.attr('string')
+    lat : DS.attr('number')
+    lon : DS.attr('number')
     #must set lat,lon when creating object...
     pics : []     #an array of image objects
     thumbs : []   #divs for displaying the thumb
@@ -64,6 +66,25 @@ App.Activity = DS.Model.extend(
     elementId : (->
       "list-item-" + @get('id');
       ).property()
+
+    set_marker: (map) -> 
+      try
+        console.log "Setting marker for ", @get('name')
+        marker = new google.maps.Marker({
+          position : new google.maps.LatLng(@get('lat'), @get('lon'))
+          title : @get('name')
+          map : map
+        })
+        marker.activity = this
+        
+        google.maps.event.addListener(marker, 'mouseover', -> marker.activity.set('highlighted', true))
+        google.maps.event.addListener(marker, 'mouseout', -> marker.activity.set('highlighted', false))
+        google.maps.event.addListener(marker, 'click', -> App.navController.activity_clicked(marker.activity))
+        
+        @set('marker', marker)
+      catch e
+        console.log "Goodle Map Marker Creation failed", e
+        return marker  
 
     set_distance_to_home: (->
       toRad = (value) ->
@@ -93,25 +114,7 @@ App.Activity = DS.Model.extend(
       return null
     ).observes('home')
         
-    set_marker: (map) -> 
-      try
-        marker = new google.maps.Marker({
-                      position : new google.maps.LatLng(@get('lat'), @get('lon')),
-                      title : @get('name'),
-                      map : map
-                    })
-        marker.activity = this
-        
-        google.maps.event.addListener(marker, 'mouseover', -> marker.activity.set('highlighted', true))
-        
-        google.maps.event.addListener(marker, 'mouseout', -> marker.activity.set('highlighted', false))
-        
-        google.maps.event.addListener(marker, 'click', -> App.navController.activity_clicked(marker.activity))
-        
-        @set('marker', marker)
-      catch e
-        console.log ("Goodle Map Marker Creation failed")
-      return marker
+    
     
     createThumb: (img, i) ->
       #create thumb elements

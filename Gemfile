@@ -19,6 +19,7 @@ group :development, :tests do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
+  gem 'poltergeist'
   gem 'launchy'
   #gem 'growl'
   gem 'guard'
@@ -26,6 +27,9 @@ group :development, :tests do
   #gem 'guard-cucumber'
   gem 'guard-rspec'
   gem 'guard-zeus'
+  #gem 'guard-livereload'
+  #gem 'rack-livereload'
+  gem 'therubyracer'
   gem 'rb-inotify', require: false
   gem 'rb-fsevent', require: false
   gem 'rb-fchange', require: false
@@ -35,6 +39,8 @@ end
 # in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
+  gem 'less-rails'
+  gem 'therubyracer'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'ember-rails'
   gem "ember-source", "1.0.0rc3"

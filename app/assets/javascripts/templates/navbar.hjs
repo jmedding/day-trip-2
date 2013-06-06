@@ -9,7 +9,7 @@
       <a class="brand" href="#">Dt2</a>
       <div class="container nav-collapse">
         <ul class="nav">
-          {{#each activity in view.activities}}
+          {{#each activity in selectedActivities}}
             <li>{{#linkTo 'activity_detail' activity}} {{activity.name}} {{/linkTo}}</li>
           {{/each}}
         </ul>

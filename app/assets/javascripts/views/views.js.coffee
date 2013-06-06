@@ -12,14 +12,21 @@ App.ActivityView = Em.View.extend(
     highlightedBinding: 'this.activity.highlighted'
     distanceBinding: 'this.activity.distance_to_home'
     
+    # didInsertElement : ->
+    #   activity = @get('controller').get('model')
+    #   console.log "Inserting activity", @get('controller').get('model')
+    #   console.log App.page_map, App.page_map? 
+    #   activity.set_marker(App.page_map) if App.page_map?
+
     click : (evt) -> 
       #following line gets controller and then the activity 
-      console.log 'first', @get('content')
-      console.log 'second', @get('content').get('content')
-      activity = @get('content').get('content')
+      console.log 'zero', @get('controller')
+      console.log 'first', @get('model')
+      console.log 'second', @get('controller').get('content')
+      activity = @get('controller').get('content')
       console.log "third", activity
       # set_active will transition to activity_detail route
-      @get('controller').set_active(evt, activity)
+      @get('controller').activity_clicked(evt, activity)
 
       return null
 
@@ -27,7 +34,29 @@ App.ActivityView = Em.View.extend(
 
 App.ActivityDetialView = Ember.View.extend(
   templateName : 'activity_detail'
-  didInsertElement : ->
-    App.navbarController.activity_clicked(content)
-    console.log "didInsertElement"
+
+)
+
+App.QueryPanelView = Em.View.extend(
+  templateName: 'query-panel'
+  classNames: ['query rounded shadow']
+  distanceBinding:'App.queryPanelController.distance'
+  seasonsBinding: 'App.queryPanelController.seasons'
+  attributesBinding: 'App.queryPanelController.attributes'
+  
+  increment_distance: ->
+    App.queryPanelController.set_distance(1)
+    return null
+  decrement_distance: ->
+    App.queryPanelController.set_distance(-1)
+    return null
+  
+)
+
+App.MapView = Em.View.extend(
+  templateName: 'map'
+  classNames: ['map rounded shadow']
+
+      
+
 )

@@ -36,4 +36,7 @@ Dt2::Application.configure do
   config.assets.debug = true
 
   config.ember.variant = :development 
+
+  #config.middleware.insert_after(ActionDispatch::Static, Rack::LiveReload)
+
 end
