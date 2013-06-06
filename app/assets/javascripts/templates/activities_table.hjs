@@ -1,0 +1,15 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> Activities </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each activity in controller}}
+    <tr>
+      {{render 'activity' activity }}
+    </tr>  
+    {{/each}}
+  <tbody>
+
+</table>

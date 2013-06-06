@@ -1,0 +1,19 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">Dt2</a>
+      <div class="container nav-collapse">
+        <ul class="nav">
+          {{#each activity in selectedActivities}}
+            <li>{{#linkTo 'activity_detail' activity}} {{activity.name}} {{/linkTo}}</li>
+          {{/each}}
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>

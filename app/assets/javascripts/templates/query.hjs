@@ -1,0 +1,39 @@
+  <div id="query"> 
+    <div class="distance_label">
+      Search Distance:
+    </div>
+    <div class="distance_num">
+      {{distance}}km
+    </div>
+    <div class="btn-group">
+      <div id="search_close" class="btn btn-mini spin-d" {{action "decrement_distance"}} alt="Decrease the search range">
+          -
+      </div>
+      <div id="search_far" class="btn btn-mini spin-u" {{action "increment_distance"}} alt="Increase the search range">
+         +
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+ 
+    {{#each seasons}}
+      <div class="season">
+        <label>
+          {{view Em.Checkbox checkedBinding="val"}}
+          {{label}}
+        </label>
+      </div>
+    {{/each}}
+
+    <div class="clearfix"></div>
+    
+    {{#each attributes}}
+      <div class="attribute">
+        <label>
+          {{view Em.Checkbox checkedBinding="val"}}
+          {{label}}
+        </label>
+      </div>
+    {{/each}}
+  </div>
+  <div class="clearfix"></div>
