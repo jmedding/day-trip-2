@@ -17,21 +17,43 @@ App.ActivitiesController = Ember.ArrayController.extend(
   ).observes('content.isLoaded', 'map')
 )
 
-App.ActivitiesIndexController = Ember.ArrayController.extend(
 
-  add_to_selected: (activity) ->
-    #can remove this once all incoming calls are moved to activitiesCTRL
-    @activitiesCTRLR.add_to_selected(activity)
+App.ActivitiesIndexController = Ember.ArrayController.extend(
+  needs : ['activities', 'query']
+  distanceBinding : 'controllers.query.distance'
+  sortProperties : ['distance_to_home']
+  sortAscending : true
+
+  filterActivities : (->
+    # reset this.content based on query panel settings
+    all = @get('controllers').get('activities').get('content')
+    all = all.filter(((activity)-> 
+      console.log @distance
+      console.log activity.get('distance_to_home')
+      if activity.get('distance_to_home') < @get('distance')
+        true
+      else 
+        false
+      ), @)
+
+    console.log all
+
+    @set('content', all)
+
+    
+    ).observes('distance')
+
+  compare_activities: (a,b) ->
+      result = 0
+      if App.user.home?
+        result =  a.get('distance_to_home') - b.get('distance_to_home')
+      return result   
 )
 
+
 App.ActivityController = Ember.ObjectController.extend(
-  needs: ['activities']
 
   activity_clicked: (evt, activity) ->
-    console.log @content
-    @get('controllers').get('activities').add_to_selected(activity)
-    # this.get('target') returns the current route
-    # this.get('target').transitionTo('activity_detail', activity)
     @transitionToRoute('activity_detail', activity)
     return null
 
@@ -42,11 +64,9 @@ App.ActivityDetailController = Ember.ObjectController.extend(
 
 )
 
+
 App.NavbarController = Ember.ArrayController.extend(
 
-  activity_clicked: (activity) -> 
-    @content.pushObject(activity) if @content.indexOf(activity) < 0
-    @set('selectedActivity', activity)
 )
 
 App.NavItemController = Ember.ObjectController.extend(
@@ -91,6 +111,7 @@ App.MapController = Em.Controller.extend(
   activeMarker:         null
   
   activityChanged : (->
+    console.log "a"
     return null unless App.page_map?
     console.log 'page_map exists!'
     if(!@activity?)
@@ -99,11 +120,12 @@ App.MapController = Em.Controller.extend(
           @activeMarker = null
         
     else
+        console.log "activityfound"
         if (@activeMarker)
-          @activeMarker.setAnimation(null)       
+          @get('activeMarker').setAnimation(null)       
         if @activity.marker?
-            @activeMarker = @activity.marker
-            @activeMarker.setAnimation(google.maps.Animation.BOUNCE)
+          @set('activeMarker', @get('activity').get('marker'))
+          @activeMarker.setAnimation(google.maps.Animation.BOUNCE)
         return  
   ).observes('activity')
 

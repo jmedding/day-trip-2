@@ -57,7 +57,6 @@ App.Activity = DS.Model.extend(
     marker : null
     highlighted : false
     homeBinding : 'App.user.home'
-    distance_to_home: 1
     
     url_name : (->
         return @name.toLowerCase().replace(/(\s)/g, "-")
@@ -86,7 +85,11 @@ App.Activity = DS.Model.extend(
         console.log "Goodle Map Marker Creation failed", e
         return marker  
 
-    set_distance_to_home: (->
+    distance_to_home: (->
+      console.log "setting distance_to_home"
+      
+      return 1 unless @home?
+
       toRad = (value) ->
           # Converts numeric degrees to radians
           value * Math.PI / 180
@@ -94,25 +97,24 @@ App.Activity = DS.Model.extend(
       if @lat is null or @lon is null 
         #error condition...
         return -1
-        
       d = null
-      if @home?
-        lat1 = this.lat
-        lon1 = this.lon
-        lat2 = this.home.lat()
-        lon2 = this.home.lng()
-        R = 6371                # km
-        dLat = toRad(lat2-lat1)
-        dLon = toRad(lon2-lon1)
-        lat1r = toRad(lat1)
-        lat2r = toRad(lat2)
-        
-        a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1r) * Math.cos(lat2r)
-        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-        d = R * c
-        @set('distance_to_home',parseInt(d))
-      return null
-    ).observes('home')
+      lat1 = @get('lat')
+      lon1 = @get('lon')
+      lat2 = @get('home').lat()
+      lon2 = @get('home').lng()
+      R = 6371                # km
+      dLat = toRad(lat2-lat1)
+      dLon = toRad(lon2-lon1)
+      lat1r = toRad(lat1)
+      lat2r = toRad(lat2)
+      
+      a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1r) * Math.cos(lat2r)
+      c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+      d = R * c
+      console.log d
+      parseInt(d)
+    
+    ).property('home')
         
     
     

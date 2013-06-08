@@ -27,8 +27,8 @@ group :development, :tests do
   #gem 'guard-cucumber'
   gem 'guard-rspec'
   gem 'guard-zeus'
-  #gem 'guard-livereload'
-  #gem 'rack-livereload'
+  gem 'guard-livereload'
+  gem 'rack-livereload'
   gem 'therubyracer'
   gem 'rb-inotify', require: false
   gem 'rb-fsevent', require: false

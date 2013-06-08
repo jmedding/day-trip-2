@@ -35,13 +35,10 @@ App.ActivityDetailRoute = Ember.Route.extend(
     # this function will only be called if 
     # we enter app directly at the activity_detial route
     # it is not called when using the #linkTo helper
-    m = App.Activity.find(params.activity_id)
-    console.log m
-    @controllerFor('activities').add_to_selected(m)
-    # @controllerFor('activity').activity_clicked(m)
-    return m
+    App.Activity.find(params.activity_id)
 
   setupController : (controller, model) ->
+    @controllerFor('activities').add_to_selected(model)
     controller.set('content', model)
     return null
 

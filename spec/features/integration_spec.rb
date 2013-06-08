@@ -6,7 +6,7 @@ feature 'Basics', :js => true do
 
 
   
-  scenario 'viist root and find no selected activities in navbar' do
+  scenario 'visit root and find no selected activities in navbar' do
     visit root_path
     
     navbar_activities = page.all('ul.nav li')
@@ -27,7 +27,7 @@ feature 'Basics', :js => true do
     navbar_activities.length.should == 2
   end
 
-  scenario 'viist activity and find it in the navbar' do
+  scenario 'visit activity and find it in the navbar' do
     visit '/'
     visit '/#1'
     navbar_activities = page.all('ul.nav li')

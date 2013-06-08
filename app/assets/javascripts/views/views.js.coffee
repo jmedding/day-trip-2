@@ -20,16 +20,12 @@ App.ActivityView = Em.View.extend(
 
     click : (evt) -> 
       #following line gets controller and then the activity 
-      console.log 'zero', @get('controller')
-      console.log 'first', @get('model')
-      console.log 'second', @get('controller').get('content')
       activity = @get('controller').get('content')
-      console.log "third", activity
-      # set_active will transition to activity_detail route
+      
+      # will transition to activity_detail route
       @get('controller').activity_clicked(evt, activity)
 
       return null
-
 )
 
 App.ActivityDetialView = Ember.View.extend(

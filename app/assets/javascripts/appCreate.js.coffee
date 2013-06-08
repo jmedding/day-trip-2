@@ -4,8 +4,8 @@
 
   ready : ->
     if google?
-      mz = @locateUser()
-      @mapInitialize(mz) 
+      mapZoom = @locateUser()
+      @mapInitialize(mapZoom) 
     
     console.log "Ember is up and running"
 
