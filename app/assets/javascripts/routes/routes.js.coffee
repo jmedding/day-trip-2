@@ -11,9 +11,8 @@ App.ActivitiesIndexRoute = Ember.Route.extend(
   model : ->
     this.modelFor 'activities'
 
-  # setupController : (controller, model) ->
-  #   controller.set('content', model)
-  #   return null
+  setupController : (controller, model) ->
+    return null
 
   renderTemplate: ->
     @render(  'activities_table', 

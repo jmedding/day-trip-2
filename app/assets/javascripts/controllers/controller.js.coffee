@@ -23,25 +23,28 @@ App.ActivitiesIndexController = Ember.ArrayController.extend(
   distanceBinding : 'controllers.query.distance'
   sortProperties : ['distance_to_home']
   sortAscending : true
+  homeBinding : 'App.user.home'
+  allActivitiesBinding : 'controllers.activities.content'
+  mapBinding : 'App.page_map'
 
-  filterActivities : (->
+  filterActivities : ->
+    console.log "filtering activities", @get('allActivities')
     # reset this.content based on query panel settings
-    all = @get('controllers').get('activities').get('content')
-    all = all.filter(((activity)-> 
-      console.log @distance
-      console.log activity.get('distance_to_home')
+    filtered =  @get('allActivities').filter(((activity)-> 
+      console.log activity.get('distance_to_home'), @distance
       if activity.get('distance_to_home') < @get('distance')
         true
       else 
         false
       ), @)
 
-    console.log all
-
-    @set('content', all)
-
+    console.log filtered
+    @set('content', filtered)
     
-    ).observes('distance')
+
+  triggerFilterActivities: (-> 
+    @filterActivities()
+    ).observes('distance', 'home', 'map')
 
   compare_activities: (a,b) ->
       result = 0
