@@ -56,3 +56,11 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+def set_home(lat=47.47, lon=8.32)
+    #p "============><============" 
+    #page.execute_script("Ember.testing = true;")
+    page.execute_script("Em.run(function(){App.user.set('home', new google.maps.LatLng(#{lat}, #{lon}))});")
+    #page.execute_script("console.log(App.user.home)")
+    #p "============><============" 
+end

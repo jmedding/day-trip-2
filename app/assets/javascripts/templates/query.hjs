@@ -6,10 +6,10 @@
       {{distance}}km
     </div>
     <div class="btn-group">
-      <div id="search_close" class="btn btn-mini spin-d" {{action "decrement_distance"}} alt="Decrease the search range">
+      <div id="search-close" class="btn btn-mini spin-d" {{action "decrement_distance"}} alt="Decrease the search range">
           -
       </div>
-      <div id="search_far" class="btn btn-mini spin-u" {{action "increment_distance"}} alt="Increase the search range">
+      <div id="search-far" class="btn btn-mini spin-u" {{action "increment_distance"}} alt="Increase the search range">
          +
       </div>
     </div>
