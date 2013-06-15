@@ -3,6 +3,23 @@ require 'spec_helper'
 
 feature 'Basics', :js => true do
 
+  
+  it "should only show activities for the selected seasons", :js => true do
+    visit "/"
+    find('#search-far').click
+    find('#search-far').click
+    find('#search-far').click
+    page.should have_css(schatzalp_id)
+    page.should have_css(regensburg_id)
+    uncheck('Winter')
+    page.should have_no_css(regensburg_id)
+    page.should have_css(schatzalp_id)
+    uncheck('Summer')
+    page.should have_css(schatzalp_id)
+    uncheck('Autumn')
+    page.should have_no_css(schatzalp_id)
+  end
+
   scenario 'listed is filtered based on distance' do
     # not sure how to avoid calling the map info in the test
     # so will just skip this test in case there is no map.
@@ -13,22 +30,22 @@ feature 'Basics', :js => true do
 
     # Check correct number of activities shown in index
     page.should have_content('Sledding in Regensberg')
-    page.should have_no_css('#list-item-1')
-    page.should have_css('#list-item-2')
+    page.should have_no_css(schatzalp_id)
+    page.should have_css(regensburg_id)
     # increase distance filter and check
     find('#search-far').click
     find('#search-far').click
-    page.should have_css('#list-item-1')
+    page.should have_css(schatzalp_id)
 
     # decrease distance filter and check
     find('#search-close').click
     find('#search-close').click
-    page.should have_no_css('#list-item-1')
+    page.should have_no_css(schatzalp_id)
 
     # move home and check
     set_home(46.9, 9.67)  #close to Davos
-    page.should have_no_css('#list-item-2')
-    page.should have_css('#list-item-1')
+    page.should have_no_css(regensburg_id)
+    page.should have_css(schatzalp_id)
 
   end
 
@@ -39,8 +56,8 @@ feature 'Basics', :js => true do
     # increase distance in query box so both activities are listed
     find('#search-far').click
     find('#search-far').click
-    page.should have_css('#list-item-1')
-    page.should have_css('#list-item-2')
+    page.should have_css(schatzalp_id)
+    page.should have_css(regensburg_id)
 
 
     
@@ -49,18 +66,18 @@ feature 'Basics', :js => true do
     
     navbar_activities = page.all('ul.nav li')
     navbar_activities.length.should == 0
-    find('#list-item-1').click()
+    find(schatzalp_id).click()
     page.should have_content('Activity Detail')
     navbar_activities = page.all('ul.nav li')
     navbar_activities.length.should == 1
 
     click_on('Dt2')
-    find('#list-item-2').click()
+    find(regensburg_id).click()
     navbar_activities = page.all('ul.nav li')
     navbar_activities.length.should == 2
 
     click_on('Dt2')
-    find('#list-item-2').click()
+    find(regensburg_id).click()
     navbar_activities = page.all('ul.nav li')
     navbar_activities.length.should == 2
   end
@@ -75,7 +92,7 @@ feature 'Basics', :js => true do
 
     # should not add a duplicate navbar item
     click_on('Dt2')
-    find('#list-item-2').click()
+    find(regensburg_id).click()
     navbar_activities = page.all('ul.nav li')
     navbar_activities.length.should == 1
   end

@@ -45,8 +45,20 @@ App.User = Em.Object.extend(
         )
         @set('marker', marker)
 )
+
+App.Icon = DS.Model.extend(
+  activities: DS.hasMany('App.Activity')
+  name : DS.attr('string')
+  file : DS.attr('string')
+)
+
+App.Season    = App.Icon.extend()
+App.Category  = App.Icon.extend()
  
 App.Activity = DS.Model.extend(
+    seasons : DS.hasMany 'App.Season'
+    categrories : DS.hasMany 'App.Category'
+    
     name : DS.attr('string')
     lat : DS.attr('number')
     lon : DS.attr('number')

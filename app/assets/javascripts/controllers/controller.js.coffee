@@ -26,6 +26,7 @@ App.ActivitiesIndexController = Ember.ArrayController.extend(
   homeBinding : 'App.user.home'
   allActivitiesBinding : 'controllers.activities.content'
   mapBinding : 'App.page_map'
+  seasonsBinding: 'controllers.query.seasons'
 
   filterActivities : ->
     console.log "filtering activities", @get('allActivities')
@@ -37,20 +38,32 @@ App.ActivitiesIndexController = Ember.ArrayController.extend(
       else 
         false
       ), @)
-
+    filtered = filtered.filter(@check_season, @)
     console.log filtered
     @set('content', filtered)
     
 
-  triggerFilterActivities: (-> 
+  triggerFilterActivities: (->  
+    console.log 'time to filter!'
     @filterActivities()
-    ).observes('distance', 'home', 'map')
+    ).observes('distance', 'home', 'map', 'seasons.#each.val')
 
   compare_activities: (a,b) ->
       result = 0
       if App.user.home?
         result =  a.get('distance_to_home') - b.get('distance_to_home')
-      return result   
+      return result 
+
+  check_season: (activity) ->
+    #show anything that meets any of the selected items
+    for season in @seasons
+      console.log season.label, season.val
+      if season.val
+        key = season.label.toLowerCase()
+        console.log key, activity.get('seasons').someProperty('id', key)
+        activity.get('seasons').forEach (item)-> console.log item.get('name')
+        return true if activity.get('seasons').someProperty('id', key)
+    return false  
 )
 
 
@@ -88,7 +101,7 @@ App.QueryController = Em.Controller.extend(
   nature: { label: 'Nature', val:  true}
   boat:   { label: 'Boat',   val:  true}
     
-  seasons:    (-> [ @winter, @spring, @summer, @autumn ]).property('winter', 'spring', 'summer', 'autumn').cacheable()
+  seasons:    (-> [ @winter, @spring, @summer, @autumn ]).property('winter.val', 'spring.val', 'summer.val', 'autumn.val').cacheable()
   attributes: (-> [ @hiking, @nature, @boat ]).property('hiking', 'nature', 'boat').cacheable()
   
   distance: (-> @distances[@distance_index]).property('distance_index')

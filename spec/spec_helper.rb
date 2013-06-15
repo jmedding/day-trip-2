@@ -57,6 +57,15 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
+def regensburg_id
+  '#list-item-2'  
+end
+
+def schatzalp_id
+  '#list-item-1'
+end
+
+
 def set_home(lat=47.47, lon=8.32)
     #p "============><============" 
     #page.execute_script("Ember.testing = true;")
