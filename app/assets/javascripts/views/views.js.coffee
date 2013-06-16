@@ -12,19 +12,10 @@ App.ActivityView = Em.View.extend(
     highlightedBinding: 'this.activity.highlighted'
     distanceBinding: 'this.activity.distance_to_home'
     
-    # didInsertElement : ->
-    #   activity = @get('controller').get('model')
-    #   console.log "Inserting activity", @get('controller').get('model')
-    #   console.log App.page_map, App.page_map? 
-    #   activity.set_marker(App.page_map) if App.page_map?
-
     click : (evt) -> 
-      #following line gets controller and then the activity 
-      activity = @get('controller').get('content')
-      
+      activity = @get('controller').get('content')     
       # will transition to activity_detail route
       @get('controller').activity_clicked(evt, activity)
-
       return null
 )
 

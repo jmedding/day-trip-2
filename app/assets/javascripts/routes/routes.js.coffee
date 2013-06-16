@@ -8,10 +8,10 @@ App.ActivitiesRoute = Ember.Route.extend(
 )
 
 App.ActivitiesIndexRoute = Ember.Route.extend(
-  model : ->
-    this.modelFor 'activities'
 
   setupController : (controller, model) ->
+    @controllerFor('activities').set('selectedActivity', null)
+    controller.filterActivities()
     return null
 
   renderTemplate: ->
@@ -25,8 +25,6 @@ App.ActivitiesIndexRoute = Ember.Route.extend(
       outlet: 'query'
       controller: 'query'
     )
-
-
 )
 
 App.ActivityDetailRoute = Ember.Route.extend(

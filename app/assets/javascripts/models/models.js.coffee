@@ -57,8 +57,8 @@ App.Category  = App.Icon.extend()
  
 App.Activity = DS.Model.extend(
     seasons : DS.hasMany 'App.Season'
-    categrories : DS.hasMany 'App.Category'
-    
+    categories : DS.hasMany 'App.Category'
+
     name : DS.attr('string')
     lat : DS.attr('number')
     lon : DS.attr('number')
@@ -78,9 +78,9 @@ App.Activity = DS.Model.extend(
       "list-item-" + @get('id');
       ).property()
 
-    set_marker: (map) -> 
+    set_marker: (map, controller) -> 
       try
-        console.log "Setting marker for ", @get('name')
+        #console.log "Setting marker for ", @get('name')
         marker = new google.maps.Marker({
           position : new google.maps.LatLng(@get('lat'), @get('lon'))
           title : @get('name')
@@ -88,9 +88,10 @@ App.Activity = DS.Model.extend(
         })
         marker.activity = this
         
+        console.log controller
         google.maps.event.addListener(marker, 'mouseover', -> marker.activity.set('highlighted', true))
         google.maps.event.addListener(marker, 'mouseout', -> marker.activity.set('highlighted', false))
-        google.maps.event.addListener(marker, 'click', -> App.navController.activity_clicked(marker.activity))
+        google.maps.event.addListener(marker, 'click', -> controller.activity_clicked(marker.activity))
         
         @set('marker', marker)
       catch e
@@ -98,7 +99,7 @@ App.Activity = DS.Model.extend(
         return marker  
 
     distance_to_home: (->
-      console.log "setting distance_to_home"
+      #console.log "setting distance_to_home"
       
       return 1 unless @home?
 
@@ -123,7 +124,7 @@ App.Activity = DS.Model.extend(
       a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1r) * Math.cos(lat2r)
       c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
       d = R * c
-      console.log d
+      #console.log d
       parseInt(d)
     
     ).property('home')

@@ -2,6 +2,15 @@ guard 'bundler' do
   watch('Gemfile')
 end
 
+guard 'livereload' do
+  watch(%r{app/views/.+\.(erb|haml|slim)$})
+  watch(%r{app/helpers/.+\.rb})
+  watch(%r{public/.+\.(css|js|html)})
+  watch(%r{config/locales/.+\.yml})
+  # Rails Assets Pipeline
+  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|js|html))).*}) { |m| "/assets/#{m[3]}" }
+end
+
 guard 'rspec', zeus: true, bundler: false do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
@@ -17,14 +26,5 @@ guard 'rspec', zeus: true, bundler: false do
   watch(%r{^app/views/(.+)/.*\.(erb|slim|haml)$})          { |m| "spec/features/#{m[1]}_spec.rb" }
   watch(%r{^app/assets/javascripts/(.+)/.*\.(js|coffee)$})          { |m| "spec/features" }
   watch(%r{^app/assets/javascripts/.*\.(js|coffee)$})          { |m| "spec/features" }
-end
-
-guard 'livereload' do
-  watch(%r{app/views/.+\.(erb|haml|slim)$})
-  watch(%r{app/helpers/.+\.rb})
-  watch(%r{public/.+\.(css|js|html)})
-  watch(%r{config/locales/.+\.yml})
-  # Rails Assets Pipeline
-  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|js|html))).*}) { |m| "/assets/#{m[3]}" }
 end
 

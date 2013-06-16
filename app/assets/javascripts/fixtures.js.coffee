@@ -20,11 +20,30 @@ App.Activity.FIXTURES =  [
   }
 ]
 
+App.Category.FIXTURES = [
+  {
+    id : 'hiking'
+    name : 'Hiking'
+    file : 'hiking.png'
+  }
+  {
+    id : 'nature'
+    name : 'Nature'
+    file : 'nature.png'
+  }
+  {
+    id : 'boat'
+    name : 'Boat'
+    file : 'boat.png'
+  }
+
+]
+
 App.Season.FIXTURES = [
   {
     id : 'summer'
     name : 'Summer'
-    file : 'summar.png'
+    file : 'summer.png'
   }
   {
     id : 'autumn'

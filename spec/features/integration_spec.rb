@@ -4,8 +4,9 @@ require 'spec_helper'
 feature 'Basics', :js => true do
 
   
-  it "should only show activities for the selected seasons", :js => true do
+  scenario "should only show activities for the selected seasons" do
     visit "/"
+    set_home()
     find('#search-far').click
     find('#search-far').click
     find('#search-far').click
@@ -18,6 +19,21 @@ feature 'Basics', :js => true do
     page.should have_css(schatzalp_id)
     uncheck('Autumn')
     page.should have_no_css(schatzalp_id)
+  end
+
+  scenario "filter by categories" do
+    # remove any activities that include unchecked categories
+
+    visit "/"
+    set_home()
+    find('#search-far').click
+    find('#search-far').click
+    find('#search-far').click
+    page.should have_css(schatzalp_id)
+    page.should have_css(regensburg_id)
+    uncheck('Hiking')
+    page.should have_no_css(schatzalp_id)
+
   end
 
   scenario 'listed is filtered based on distance' do

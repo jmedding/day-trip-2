@@ -9,11 +9,15 @@ App.ActivitiesController = Ember.ArrayController.extend(
     @set('selectedActivity', activity)
     if @get('selectedActivities').indexOf(activity) < 0
       @selectedActivities.pushObject(activity) 
-   
+  
+  activity_clicked: (activity) ->
+    console.log "clicked", activity 
+    @transitionToRoute('activity_detail', activity)
+
   set_markers : (->
     if App.page_map
-      @forEach (activity, index, array) ->
-        activity.set_marker(App.page_map) 
+      @forEach( ((activity, index, array) ->
+        activity.set_marker(App.page_map, @)), @)
   ).observes('content.isLoaded', 'map')
 )
 
@@ -27,26 +31,23 @@ App.ActivitiesIndexController = Ember.ArrayController.extend(
   allActivitiesBinding : 'controllers.activities.content'
   mapBinding : 'App.page_map'
   seasonsBinding: 'controllers.query.seasons'
+  categoriesBinding: 'controllers.query.attributes'
 
   filterActivities : ->
-    console.log "filtering activities", @get('allActivities')
     # reset this.content based on query panel settings
     filtered =  @get('allActivities').filter(((activity)-> 
-      console.log activity.get('distance_to_home'), @distance
       if activity.get('distance_to_home') < @get('distance')
         true
       else 
         false
       ), @)
-    filtered = filtered.filter(@check_season, @)
-    console.log filtered
+    filtered = filtered.filter(@check_season, @).filter(@check_category, @)
     @set('content', filtered)
     
 
   triggerFilterActivities: (->  
-    console.log 'time to filter!'
     @filterActivities()
-    ).observes('distance', 'home', 'map', 'seasons.#each.val')
+    ).observes('distance', 'home', 'map', 'seasons.#each.val', 'categories.#each.val')
 
   compare_activities: (a,b) ->
       result = 0
@@ -57,13 +58,18 @@ App.ActivitiesIndexController = Ember.ArrayController.extend(
   check_season: (activity) ->
     #show anything that meets any of the selected items
     for season in @seasons
-      console.log season.label, season.val
       if season.val
         key = season.label.toLowerCase()
-        console.log key, activity.get('seasons').someProperty('id', key)
-        activity.get('seasons').forEach (item)-> console.log item.get('name')
         return true if activity.get('seasons').someProperty('id', key)
     return false  
+
+  check_category: (activity) ->
+    # remove any activitiy that includes an unselected category
+    for category in @categories
+      if !category.val
+        key = category.label.toLowerCase()
+        return false if activity.get('categories').someProperty('id', key)
+    return true
 )
 
 
@@ -102,22 +108,16 @@ App.QueryController = Em.Controller.extend(
   boat:   { label: 'Boat',   val:  true}
     
   seasons:    (-> [ @winter, @spring, @summer, @autumn ]).property('winter.val', 'spring.val', 'summer.val', 'autumn.val').cacheable()
-  attributes: (-> [ @hiking, @nature, @boat ]).property('hiking', 'nature', 'boat').cacheable()
+  attributes: (-> [ @hiking, @nature, @boat ]).property('hiking.val', 'nature.val', 'boat.val').cacheable()
   
   distance: (-> @distances[@distance_index]).property('distance_index')
   
   set_distance: (increment) ->
     temp = @distance_index + increment
     @set('distance_index', temp) if temp >= 0 and temp < @distances.length
-    return null
   
-  increment_distance: ->
-    @set_distance(1)
-    return null
-  
-  decrement_distance: ->
-    @set_distance(-1)
-    return null
+  increment_distance: -> @set_distance(1)
+  decrement_distance: -> @set_distance(-1)
 )  
 
 App.MapController = Em.Controller.extend(
