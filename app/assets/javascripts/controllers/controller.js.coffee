@@ -11,7 +11,6 @@ App.ActivitiesController = Ember.ArrayController.extend(
       @selectedActivities.pushObject(activity) 
   
   activity_clicked: (activity) ->
-    console.log "clicked", activity 
     @transitionToRoute('activity_detail', activity)
 
   set_markers : (->
@@ -154,28 +153,26 @@ App.ThumbsController = Ember.ArrayController.extend(
   # display the cpic.get('canvas')s for thumb. Worst case would be to 
   # append it with didInsertElement.
 
+  # Problem: different screen sizes will have different Map widths.
+  # This means that setting the picture canvas one time won't work.
+  # Solution: Before rendering the pic, check that the canvas size
+  # matches the map div size. If canvas is null or different size, 
+  # the set it.
+
   displayPhoto: (pic) ->
         return ->
           map = $('#map')
           canvas = pic.get('canvas') 
-          console.log "Canvas?", canvas
           if !canvas? or map.width() != canvas.width or map.height() != canvas.height
-            if canvas?
-              console.log "Canvas width?", map.width() != canvas.width
-              console.log "Canvas height?", map.height() != canvas.height
-
             canvas = pic.createCanvas(pic.get('img'), map)
-          console.log "attaching", map, canvas
           if map? and canvas?
               map.append(canvas)
-              console.log "after append"
           else
               null
     
     removePhoto : () ->
         map = $('#map')
         return ->
-            console.log "detaching"
             if map? 
                 $('canvas.photo').detach()
             else

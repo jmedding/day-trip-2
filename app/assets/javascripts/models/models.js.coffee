@@ -2,7 +2,6 @@ App.User = Em.Object.extend(
     home : null
     marker : null
     set_home: (map) ->
-      console.log "set_home, map: ", map
       if @marker is null
         marker = new google.maps.Marker(
             position: @home
@@ -88,8 +87,6 @@ App.Activity = DS.Model.extend(
           map : map
         })
         marker.activity = this
-        
-        console.log controller
         google.maps.event.addListener(marker, 'mouseover', -> marker.activity.set('highlighted', true))
         google.maps.event.addListener(marker, 'mouseout', -> marker.activity.set('highlighted', false))
         google.maps.event.addListener(marker, 'click', -> controller.activity_clicked(marker.activity))
@@ -131,12 +128,6 @@ App.Activity = DS.Model.extend(
     ).property('home')
            
     set_images : (imageSrcs) ->
-      # Problem: different screen sizes will have different Map widths.
-      # This means that setting the picture canvas one time won't work.
-      # Solution: Before rendering the pic, check that the canvas size
-      # matches the map div size. If canvas is null or different size, 
-      # the set it.
-
       @get('pictures').forEach(((pic, index, array) ->
         pic.set_image()
       ))
@@ -149,7 +140,6 @@ App.Picture = DS.Model.extend(
   file : DS.attr('string')
 
   load_image : (-> 
-    console.log "'load_image fired"
     @set_image() if @get('ready')
     ).observes('isLoaded')
 
@@ -175,7 +165,6 @@ App.Picture = DS.Model.extend(
     ctx.drawImage(img, sx, sy, w, h, 0, 0, divSize, divSize)
     div.appendChild(canvas)
     @set('thumb', thumb)
-    console.log "set thumb for ", img.pic
     return thumb
 
   createCanvas : (img, map) ->
@@ -230,17 +219,11 @@ App.Picture = DS.Model.extend(
       @set('ready' , true)
       return null
 
-    # map div not loaded yet. This object mocks a JQUERY element
-    map = 
-      width : -> 420
-      height : -> 240
     source = src or @get('file')
-    console.log src, @get('file')
     img = new Image()
     img.pic = @
     img.onload = ->
       # this refers to 'img'
-      #@pic.createCanvas(@, map)
       @pic.createThumb(@)
       return null
     img.src = "assets/" + source  #Loads image from source

@@ -42,9 +42,7 @@ App.ThumbsView = Em.View.extend(
   ).observes('pics.@each')
 
   didInsertElement: -> 
-    map = document.getElementById("map")
-    map = $(map)
-    console.log "map:", map.width()
+    map = $('#map')
     @show_thumbs()
 
   show_thumbs: (->
@@ -57,7 +55,6 @@ App.ThumbsView = Em.View.extend(
       map = $(map)
       controller = @get('controller')
       if thumb?
-        console.log "map:", map.width() #, canvas.width
         thumb.onmouseout = controller.removePhoto()
         thumb.onmouseover = controller.displayPhoto(pic)
       node.append(pic.thumb)), @)
