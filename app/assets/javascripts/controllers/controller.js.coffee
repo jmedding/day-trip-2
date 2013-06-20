@@ -127,16 +127,13 @@ App.MapController = Em.Controller.extend(
   activeMarker:         null
   
   activityChanged : (->
-    console.log "a"
     return null unless App.page_map?
-    console.log 'page_map exists!'
     if(!@activity?)
         if (@activeMarker?)
           @activeMarker.setAnimation(null)
           @activeMarker = null
         
     else
-        console.log "activityfound"
         if (@activeMarker)
           @get('activeMarker').setAnimation(null)       
         if @activity.marker?
@@ -148,3 +145,40 @@ App.MapController = Em.Controller.extend(
   
 )   
 
+App.ThumbsController = Ember.ArrayController.extend(
+  # this should probably be refactored to use a 
+  # ThumbView for each thumbnail.  Then, all of the 
+  # Adding and removal would be managed by ember.
+  # The mouseover/out actions could be defined in the view
+  # or maybe even controller. The only trick is how to 
+  # display the cpic.get('canvas')s for thumb. Worst case would be to 
+  # append it with didInsertElement.
+
+  displayPhoto: (pic) ->
+        return ->
+          map = $('#map')
+          canvas = pic.get('canvas') 
+          console.log "Canvas?", canvas
+          if !canvas? or map.width() != canvas.width or map.height() != canvas.height
+            if canvas?
+              console.log "Canvas width?", map.width() != canvas.width
+              console.log "Canvas height?", map.height() != canvas.height
+
+            canvas = pic.createCanvas(pic.get('img'), map)
+          console.log "attaching", map, canvas
+          if map? and canvas?
+              map.append(canvas)
+              console.log "after append"
+          else
+              null
+    
+    removePhoto : () ->
+        map = $('#map')
+        return ->
+            console.log "detaching"
+            if map? 
+                $('canvas.photo').detach()
+            else
+                null
+
+)

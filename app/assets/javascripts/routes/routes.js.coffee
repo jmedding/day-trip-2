@@ -36,6 +36,8 @@ App.ActivityDetailRoute = Ember.Route.extend(
 
   setupController : (controller, model) ->
     @controllerFor('activities').add_to_selected(model)
+    model.set_images() 
+    @controllerFor('thumbs').set('content', model.get('pictures'))
     controller.set('content', model)
     return null
 
@@ -45,5 +47,10 @@ App.ActivityDetailRoute = Ember.Route.extend(
       into:   'activities'
       outlet: 'main'
       controller: 'activity_detail'
+    )
+    @render(  'thumbs', 
+      into:   'activities'
+      outlet: 'query'
+      controller: 'thumbs'
     )
 )

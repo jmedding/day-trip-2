@@ -24,26 +24,42 @@ App.ActivityDetialView = Ember.View.extend(
 
 )
 
-App.QueryPanelView = Em.View.extend(
-  templateName: 'query-panel'
-  classNames: ['query rounded shadow']
-  distanceBinding:'App.queryPanelController.distance'
-  seasonsBinding: 'App.queryPanelController.seasons'
-  attributesBinding: 'App.queryPanelController.attributes'
-  
-  increment_distance: ->
-    App.queryPanelController.set_distance(1)
-    return null
-  decrement_distance: ->
-    App.queryPanelController.set_distance(-1)
-    return null
-  
-)
-
 App.MapView = Em.View.extend(
   templateName: 'map'
   classNames: ['map rounded shadow']
+)
 
-      
+App.ThumbsView = Em.View.extend(
+  templateName: 'thumbs'
+  picsBinding: 'controller.content'
+  tagName: 'ul'
+  classNames: ['thumbnails']
 
+  remove_old_thumbs: (->
+    node = @$()
+    while node and node.firstChild
+      node.removeChild(node.firstChild)
+  ).observes('pics.@each')
+
+  didInsertElement: -> 
+    map = document.getElementById("map")
+    map = $(map)
+    console.log "map:", map.width()
+    @show_thumbs()
+
+  show_thumbs: (->
+    node = @$()
+    return unless node?
+
+    @.get('pics').forEach(((pic) -> 
+      thumb = pic.get('thumb')
+      map = document.getElementById("map")
+      map = $(map)
+      controller = @get('controller')
+      if thumb?
+        console.log "map:", map.width() #, canvas.width
+        thumb.onmouseout = controller.removePhoto()
+        thumb.onmouseover = controller.displayPhoto(pic)
+      node.append(pic.thumb)), @)
+  ).observes('pics.@each.thumb')
 )

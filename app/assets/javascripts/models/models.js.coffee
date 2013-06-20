@@ -58,6 +58,7 @@ App.Category  = App.Icon.extend()
 App.Activity = DS.Model.extend(
     seasons : DS.hasMany 'App.Season'
     categories : DS.hasMany 'App.Category'
+    pictures : DS.hasMany 'App.Picture'
 
     name : DS.attr('string')
     lat : DS.attr('number')
@@ -128,98 +129,122 @@ App.Activity = DS.Model.extend(
       parseInt(d)
     
     ).property('home')
-        
-    
-    
-    createThumb: (img, i) ->
-      #create thumb elements
-      thumb = document.createElement("div")
-      thumb.className = "thumb thumbShadow rounded"
-      canvas = document.createElement("canvas")
-      canvas.id = "" + this.id + "_" + i
-      ctx = canvas.getContext("2d")
-      #set splice values      
-      d = img.height * 0.8
-      d = img.width  if img.width < img.height
-      w = d
-      h = d
-      divSize = 75
-      sx = parseInt((img.width - w) / 2)
-      sy = parseInt((img.height - h) / 2)
-      canvas.height = divSize
-      canvas.width = divSize
-      ctx.drawImage(img, sx, sy, w, h, 0, 0, divSize, divSize)
-      thumb.appendChild(canvas)
-      return thumb
-
-    
-    createCanvas : (img, map) ->
-      canvas = document.createElement("canvas")
-      canvas.className = "photo"
-      ctx = canvas.getContext("2d")
-      #set splice values
-      canvas.height =  map.height
-      canvas.width = map.width
-      
-      #Use full width and adjust the height
-      #normally will crop the top and bottom
-      scale = canvas.width / img.width
-      
-      if img.height > img.width
-        #unless image is portrait, then use full height and adjust width
-        #will normaly give white space on edges
-        scale = canvas.height / img.height
-            
-      h = parseInt(canvas.height / scale)
-      w = parseInt(canvas.width / scale)
-      sx = parseInt((img.width - w) / 2)
-      sy = parseInt((img.height - h) / 2)
-      dx = 0
-      dy = 0
-      cw = canvas.width
-      ch = canvas.height
-      if sx < 0
-        sx = 0
-        w = img.width
-        cw = w * scale
-        dx = parseInt((canvas.width-cw)/2)
-      if sy < 0
-        sy = 0
-        h = img.height
-        ch = h * scale
-        dy = parseInt((canvas.height-ch)/2)
-      #console.log("h: #{h}, w: #{w}, sx: #{sx}, sy: #{sy}, dx: #{dx}, dy: #{dy}, canvas.w: #{cw}, canvas.h: #{ch}")
-      ctx.drawImage(img, sx, sy, w, h, dx, dy, cw, ch)
-      return canvas
-
-    
-    
+           
     set_images : (imageSrcs) ->
-      #map div not loaded yet...
-      map = 
-        width : 420
-        height : 240
-      sources = imageSrcs or this.pics
-      bucket = []
-      tempThumbs = []
-      tempCanvases = []
-      i = 0
-      for src, i in sources
-        img = new Image()
-        img.activity = @        
-        img.onload = ->
-            thumb = @activity.createThumb(@, i); #'this' refers to img
-            canvas = @activity.createCanvas(@, map)
-            tempThumbs.push(thumb)
-            tempCanvases.push(canvas)
-            return null
-        img.src = "/assets/#{sources[i]}.jpg"   
-        bucket.push(img)
+      # Problem: different screen sizes will have different Map widths.
+      # This means that setting the picture canvas one time won't work.
+      # Solution: Before rendering the pic, check that the canvas size
+      # matches the map div size. If canvas is null or different size, 
+      # the set it.
 
-      @pics = bucket
-      @thumbs = tempThumbs
-      @photos = tempCanvases
+      @get('pictures').forEach(((pic, index, array) ->
+        pic.set_image()
+      ))
+
       return null
+)
+
+App.Picture = DS.Model.extend(
+  activity : DS.belongsTo('App.Activity')
+  file : DS.attr('string')
+
+  load_image : (-> 
+    console.log "'load_image fired"
+    @set_image() if @get('ready')
+    ).observes('isLoaded')
+
+  createThumb: (img) ->
+    thumb = document.createElement("li")
+    #thumb.className = "span1"
+    div = document.createElement('div')
+    div.className = "thumbnail"
+    thumb.appendChild(div)
+    canvas = document.createElement("canvas")
+    canvas.id = "" + @get('id')
+    ctx = canvas.getContext("2d")
+    #set splice values      
+    d = img.height * 0.8
+    d = img.width  if img.width < img.height
+    w = d
+    h = d
+    divSize = 75
+    sx = parseInt((img.width - w) / 2)
+    sy = parseInt((img.height - h) / 2)
+    canvas.height = divSize
+    canvas.width = divSize
+    ctx.drawImage(img, sx, sy, w, h, 0, 0, divSize, divSize)
+    div.appendChild(canvas)
+    @set('thumb', thumb)
+    console.log "set thumb for ", img.pic
+    return thumb
+
+  createCanvas : (img, map) ->
+    return null unless map.width() and map.height()
+
+    canvas = document.createElement("canvas")
+    canvas.setAttribute('class', 'photo')
+    canvas.setAttribute('id', "canvas_#{@get('id')}")
+    ctx = canvas.getContext("2d")
+    #set splice values
+    canvas.height =  map.outerHeight()
+    canvas.width = map.outerWidth()
+    
+    #Use full width and adjust the height
+    #normally will crop the top and bottom
+    scale = canvas.width / img.width
+    
+    if img.height > img.width
+      #unless image is portrait, then use full height and adjust width
+      #will normaly give white space on edges
+      scale = canvas.height / img.height
+          
+    h = parseInt(canvas.height / scale)
+    w = parseInt(canvas.width / scale)
+    sx = parseInt((img.width - w) / 2)
+    sy = parseInt((img.height - h) / 2)
+    dx = 0
+    dy = 0
+    cw = canvas.width
+    ch = canvas.height
+    if sx < 0
+      sx = 0
+      w = img.width
+      cw = w * scale
+      dx = parseInt((canvas.width-cw)/2)
+    if sy < 0
+      sy = 0
+      h = img.height
+      ch = h * scale
+      dy = parseInt((canvas.height-ch)/2)
+    #console.log("h: #{h}, w: #{w}, sx: #{sx}, sy: #{sy}, dx: #{dx}, dy: #{dy}, canvas.w: #{cw}, canvas.h: #{ch}")
+    ctx.drawImage(img, sx, sy, w, h, dx, dy, cw, ch)
+    #console.log "Canvas: ", canvas
+    @set('canvas', canvas) 
+    return canvas
+
+  set_image : (src)->
+    # only need to do this once
+    return if @.get('img')?
+
+    if !@.get('isLoaded')
+      @set('ready' , true)
+      return null
+
+    # map div not loaded yet. This object mocks a JQUERY element
+    map = 
+      width : -> 420
+      height : -> 240
+    source = src or @get('file')
+    console.log src, @get('file')
+    img = new Image()
+    img.pic = @
+    img.onload = ->
+      # this refers to 'img'
+      #@pic.createCanvas(@, map)
+      @pic.createThumb(@)
+      return null
+    img.src = "assets/" + source  #Loads image from source
+    @set('img', img)
 )
 
 App.Icons = Em.Object.extend
