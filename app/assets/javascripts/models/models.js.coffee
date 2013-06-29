@@ -3,6 +3,7 @@ App.User = Em.Object.extend(
     marker : null
     set_home: (map) ->
       if @marker is null
+        console.log "e"
         marker = new google.maps.Marker(
             position: @home
             title: "My Location (click and drag to move)"
@@ -11,6 +12,7 @@ App.User = Em.Object.extend(
             icon: '/assets/home2.png'
         )
         
+        console.log "f"
         marker.user = @
         google.maps.event.addListener(marker, 'dragend', (evt) -> 
           marker.user.set('home', evt.latLng)
@@ -205,9 +207,7 @@ App.Picture = DS.Model.extend(
       h = img.height
       ch = h * scale
       dy = parseInt((canvas.height-ch)/2)
-    #console.log("h: #{h}, w: #{w}, sx: #{sx}, sy: #{sy}, dx: #{dx}, dy: #{dy}, canvas.w: #{cw}, canvas.h: #{ch}")
     ctx.drawImage(img, sx, sy, w, h, dx, dy, cw, ch)
-    #console.log "Canvas: ", canvas
     @set('canvas', canvas) 
     return canvas
 
@@ -226,7 +226,7 @@ App.Picture = DS.Model.extend(
       # this refers to 'img'
       @pic.createThumb(@)
       return null
-    img.src = "assets/" + source  #Loads image from source
+    img.src = "/assets/" + source  #Loads image from source
     @set('img', img)
 )
 

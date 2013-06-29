@@ -5,7 +5,7 @@ App.Activity.FIXTURES =  [
       "seasons": ['summer', 'autumn']      
       "categories": ['hiking', 'nature']
       "info": {"Address" : "Obere Strasse 28", "Region" : "7270 Davos Platz", "Telephone" : "Tel. +41 (0)81 415 52 80"}
-      "Website":"http://www.schatzalp.ch/p.cfm?s=15&lan=1&pf=1"
+      "website":"http://www.schatzalp.ch/p.cfm?s=15&lan=1&pf=1"
       "description":"Take the funicular up to **Schatzalp** and enjoy relaxed hiking through alpine gardens or more strenuous routes that explore the mountains' higher slopes.  Enjoy lunch at several restaurants at or a few minutes walk from the top of the lift.  There is an alpine slide that's fun enough for the big kids, but safe enough even for relatively young children to enjoy."
       "pictures":[4, 5, 6, 7]      
   }

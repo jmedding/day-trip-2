@@ -20,6 +20,7 @@ group :development, :tests do
   gem 'database_cleaner'
   gem 'selenium-webdriver'
   gem 'poltergeist'
+  gem 'konacha'
   gem 'launchy'
   #gem 'growl'
   gem 'guard'
@@ -42,8 +43,8 @@ group :assets do
   gem 'less-rails'
   gem 'therubyracer'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'ember-rails'
-  gem "ember-source", "1.0.0rc3"
+  gem 'ember-rails', :git => 'git://github.com/emberjs/ember-rails.git'
+  gem "ember-source", "1.0.0rc6"
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
