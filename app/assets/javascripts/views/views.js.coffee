@@ -35,24 +35,20 @@ App.ThumbsView = Em.View.extend(
   tagName: 'ul'
   classNames: ['thumbnails']
 
-  remove_old_thumbs: (->
-    node = @$()
-    while node and node.firstChild
-      node.removeChild(node.firstChild)
-  ).observes('pics.@each')
+  remove_old_thumbs: ((thumbs)->
+    while thumbs and thumbs.firstChild
+      thumbs.removeChild(thumbs.firstChild)
+  )
 
   didInsertElement: -> 
-    map = $('#map')
     @show_thumbs()
 
   show_thumbs: (->
     node = @$()
     return unless node?
-
+    @remove_old_thumbs(node[0])
     @.get('pics').forEach(((pic) -> 
       thumb = pic.get('thumb')
-      map = document.getElementById("map")
-      map = $(map)
       controller = @get('controller')
       if thumb?
         thumb.onmouseout = controller.removePhoto()
