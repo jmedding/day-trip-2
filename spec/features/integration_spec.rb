@@ -4,7 +4,7 @@ require 'spec_helper'
 feature 'Basics', :js => true do
 
   
-  scenario "should only show activities for the selected seasons" do
+  scenario "should only show activities for the selected seasons", :slow do
     visit "/"
     set_home()
     find('#search-far').click
@@ -21,7 +21,7 @@ feature 'Basics', :js => true do
     page.should have_no_css(schatzalp_id)
   end
 
-  scenario "filter by categories" do
+  scenario "filter by categories", :slow do
     # remove any activities that include unchecked categories
 
     visit "/"
@@ -36,7 +36,7 @@ feature 'Basics', :js => true do
 
   end
 
-  scenario 'listed is filtered based on distance' do
+  scenario 'listed is filtered based on distance', :slow do
     # not sure how to avoid calling the map info in the test
     # so will just skip this test in case there is no map.
     visit root_path
@@ -66,7 +66,7 @@ feature 'Basics', :js => true do
   end
 
   
-  scenario 'visit root and find no selected activities in navbar' do
+  scenario 'visit root and find no selected activities in navbar', :slow do
     visit root_path
     set_home()
     # increase distance in query box so both activities are listed
@@ -98,7 +98,7 @@ feature 'Basics', :js => true do
     navbar_activities.length.should == 2
   end
 
-  scenario 'visit activity and find it in the navbar' do
+  scenario 'visit activity and find it in the navbar', :slow do
     visit '/'
     set_home()
 

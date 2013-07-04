@@ -7,6 +7,7 @@ describe 'Main Page', ->
     #App.reset() #reset is used mainly for integration testing
 
 
+
   it 'should load the application', ->
     assert.ok(find('#map').length)
 

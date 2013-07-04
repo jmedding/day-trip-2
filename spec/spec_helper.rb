@@ -55,6 +55,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+  config.filter_run_excluding :slow unless ENV["CAPY"]
 end
 
 def regensburg_id

@@ -33,7 +33,6 @@ window.waitUntilFound = (element) ->
   promise = new Em.RSVP.Promise( (resolve) ->
     waitfor = (element, resolve, time) ->
       time ?= 0
-      console.log "finding ", element, time
       found = $.find(element)
       if found.length > 0
         console.log "found ", found
