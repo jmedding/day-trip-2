@@ -2,6 +2,10 @@ App.Icon = DS.Model.extend(
   activities: DS.hasMany('App.Activity')
   name : DS.attr('string')
   file : DS.attr('string')
+
+  path : ( ->
+    "/assets/icons/#{@get('file')}"
+  ).property('file')
 )
 
 App.Season    = App.Icon.extend()
@@ -13,8 +17,19 @@ App.Activity = DS.Model.extend(
     pictures : DS.hasMany 'App.Picture'
 
     name : DS.attr('string')
+    info : DS.attr('string')
+    location : DS.attr('string')
+    canton : DS.attr('string')
+    address : DS.attr('string')
+    region : DS.attr('string')
+    telephone : DS.attr('string')
+    website : DS.attr('string')
+    description : DS.attr('string')
+
     lat : DS.attr('number')
     lon : DS.attr('number')
+
+    
     #must set lat,lon when creating object...
     pics : []     #an array of image objects
     thumbs : []   #divs for displaying the thumb
@@ -22,6 +37,16 @@ App.Activity = DS.Model.extend(
     marker : null
     highlighted : false
     homeBinding : 'App.user.home'
+
+    icons : (-> 
+      result = new Em.A
+      for icon in @get('seasons')
+        result.pushObject(icon)
+      for icon in @get('categories')
+        result.pushObject(icon)
+      console.log 'icons', result
+      result
+    ).property('seasons', 'categories')
     
     url_name : (->
         return @name.toLowerCase().replace(/(\s)/g, "-")

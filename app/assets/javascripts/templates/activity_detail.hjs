@@ -1,2 +1,27 @@
-  Activity Detail </br>
-  {{name}}
+<h3> {{name}} </h3>
+<hr />
+<div class="icons">
+  {{partial "show_icons"}}
+  <div class="clearfix"></div>
+</div>
+<hr />
+<div id="info">
+<table>
+  {{#if content.address}}
+      <tr> <td> {{content.address}}</td></tr>
+  {{/if}}
+  {{#if content.region}}
+      <tr> <td> {{content.region}}</td></tr>
+  {{/if}}
+  {{#if content.telephone}}
+      <tr> <td> {{content.telephone}}</td></tr>
+  {{/if}}
+  {{#if content.website}}
+    <tr><td><a href="{{content.website}}">Website</a></td></tr>
+  {{/if}}
+  <tr><td>Distance from your location: {{distance_to_home}} km</td></tr>
+</table>
+  
+</div>
+<hr />
+{{markdown description}}

@@ -13,14 +13,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require showdown
 //= require handlebars
 //= require ember
 //= require ember-data
-//= require_self
 //= require ./appCreate
 //= require ./dt2
 //= require ./fixtures
 //= require ./appInit
+//= require_self
 
 
 

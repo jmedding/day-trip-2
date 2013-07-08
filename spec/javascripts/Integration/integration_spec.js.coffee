@@ -46,7 +46,7 @@ describe 'Activity Details Page', ->
         assert.equal(result.length, 3, "Not all thumbnails were found")
         Em.run -> 
           details = $('.row').find('.span7').find('.well').html()
-          assert.include(details, "Activity Detail", "Activity Detail not displayed")
+          assert.include(details, "Regensberg", "Activity Detail not displayed")
         mochaDone()
       )
 
@@ -73,11 +73,12 @@ describe 'Activity Details Page', ->
 
   it 'has the right number of thumbs for Schatzalp', (mochaDone) ->
     # starting in Schatzalp details view
-    waitUntilFound('div.thumbnail').then((result) -> 
-      assert.ok(result, "did not find any thumbs for Schatzalp")
-      assert.equal(result.length, 4, "did not find the right number of thumbs for Schatzalp")    
-      mochaDone()
-    )
+    Em.run -> 
+      waitUntilFound('div.thumbnail').then((result) -> 
+        assert.ok(result, "did not find any thumbs for Schatzalp")
+        assert.equal(result.length, 4, "did not find the right number of thumbs for Schatzalp")    
+        mochaDone()
+      )
 
   it 'updates the thumbs when switching directly to another activity detail view', () ->
     # starting in Schatzalp detail view

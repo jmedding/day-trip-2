@@ -1,0 +1,10 @@
+{{#each content.seasons}}
+    <div class="icon pull-left">
+      <img {{bindAttr src="path"}} {{bindAttr alt="name"}} width="32" height="32"/>
+    </div>
+  {{/each}}
+  {{#each content.categories}}
+    <div class="icon pull-left">
+      <img {{bindAttr src="path"}} {{bindAttr alt="name"}}  width="32" height="32"/>
+    </div>
+  {{/each}}

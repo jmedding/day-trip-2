@@ -78,3 +78,7 @@ body {
   left: 0; 
   top: 0;
 }
+
+.icon {
+  padding-left: 7px;
+}
